@@ -121,8 +121,8 @@ var type = SourceReflector.GetType(typeof(TestEnum));
 Assert.IsTrue(type.IsEnum);
 Assert.AreEqual("A", type.DeclaredFields[0].Name);
 Assert.AreEqual("B", type.DeclaredFields[1].Name);
-Assert.AreEqual(0, type.DeclaredFields[0].GetValue(null));
-Assert.AreEqual(1, type.DeclaredFields[1].GetValue(null));
+Assert.AreEqual(TestEnum.A, type.DeclaredFields[0].GetValue(null));
+Assert.AreEqual(TestEnum.B, type.DeclaredFields[1].GetValue(null));
 ```
 
 ## Array
