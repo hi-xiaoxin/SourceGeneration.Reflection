@@ -174,8 +174,14 @@ public partial class ReflectionSourceGenerator
             {
                 if (field.IsConst)
                 {
-                    builder.AppendLine($@"GetValue = static _ => {CSharpCodeBuilder.GetConstantLiteral(field.ConstantValue)},");
-                }
+					builder.Append("GetValue = static _ => ");
+					builder.AppendLine(
+						type.IsEnum
+							// Use enum value
+							? $"{type.FullGlobalName}.{field.Name},"
+							: $"{CSharpCodeBuilder.GetConstantLiteral(field.ConstantValue)},"
+					);
+				}
                 else if (field.IsStatic)
                 {
                     builder.AppendLine($@"GetValue = static instance => {type.FullGlobalName}.{field.Name},");
@@ -464,9 +470,9 @@ public partial class ReflectionSourceGenerator
     {
         if (parameters.Count == 0)
         {
-            builder.AppendLine($"{propertyName} = Array.Empty<global::SourceGeneration.Reflection.SourceParameterInfo>(),");
-        }
-        else
+			builder.AppendLine($"{propertyName} = global::System.Array.Empty<global::SourceGeneration.Reflection.SourceParameterInfo>(),");
+		}
+		else
         {
             builder.AppendBlock($"{propertyName} = new global::SourceGeneration.Reflection.SourceParameterInfo[]", () =>
             {
