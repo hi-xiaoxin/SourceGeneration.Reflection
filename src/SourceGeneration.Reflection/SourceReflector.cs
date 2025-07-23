@@ -28,6 +28,11 @@ public static class SourceReflector
 #endif
     T>(params object?[] args)
     {
+        if (typeof(T).IsValueType && (args == null || args.Length == 0))
+        {
+            return default!;
+        }
+
         return (T)CreateInstance(GetRequiredType<T>(), args);
     }
 
@@ -50,10 +55,27 @@ public static class SourceReflector
     {
         args ??= [];
 
+        if (typeInfo.Type.IsValueType)
+        {
+            if (typeInfo.IsReflected)
+            {
+                return Activator.CreateInstance(typeInfo.Type, args)!;
+            }
+
+            if (args.Length == 0)
+            {
+                var ctor = typeInfo.DeclaredConstructors.FirstOrDefault(x => x.Parameters.Length == 0 && x.Accessibility == SourceAccessibility.Public);
+                if (ctor != null)
+                {
+                    return ctor.Invoke(args)!;
+                }
+            }
+        }
+
+
+
         var methods = typeInfo.DeclaredConstructors.Where(x => x.Parameters.Count(x => !x.HasDefaultValue) <= args.Length).ToList();
-
-        var method = Type.DefaultBinder.BindToMethod(ReflectionExtensions.DeclaredOnlyLookup, methods.Select(x => x.ConstructorInfo).ToArray(), ref args, null, null, null, out object? state);
-
+        var method = Type.DefaultBinder.BindToMethod(ReflectionExtensions.DeclaredOnlyLookup, methods.Select(x => x.ConstructorInfo).ToArray(), ref args, null, null, null, out _);
         if (typeInfo.IsReflected)
         {
             return method.Invoke(null, args)!;
@@ -114,10 +136,7 @@ public static class SourceReflector
 
         if (allowRuntimeReflection)
         {
-            if (allowRuntimeReflection)
-            {
-                return _reflectionTypes.GetOrAdd(type, CreateSourceTypeInfo);
-            }
+            return _reflectionTypes.GetOrAdd(type, CreateSourceTypeInfo);
         }
         return null;
     }
