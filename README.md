@@ -1,5 +1,3 @@
-
-
 # Reflection
 
 [![NuGet](https://img.shields.io/nuget/vpre/SourceGeneration.Reflection.svg)](https://www.nuget.org/packages/SourceGeneration.Reflection)
@@ -43,10 +41,10 @@ SourceReflection aims to provide a more universal solution, offering `AOTable` R
 ## Installing Reflection
 
 ```powershell
-Install-Package SourceGeneration.Reflection -Version 1.0.0-beta2.250415.0
+Install-Package SourceGeneration.Reflection -Version 1.0.0
 ```
 ```powershell
-dotnet add package SourceGeneration.Reflection --version 1.0.0-beta2.250415.0
+dotnet add package SourceGeneration.Reflection --version 1.0.0
 ```
 
 ## Source Reflection
