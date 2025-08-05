@@ -200,7 +200,7 @@ public static class SourceReflector
                     PropertyType = x.PropertyType,
                     IsStatic = x.GetMethod?.IsStatic == true || x.SetMethod?.IsStatic == true,
                     CanRead = x.CanRead,
-                    CanWrite = x.CanRead,
+                    CanWrite = x.CanWrite,
                     IsRequired = x.GetCustomAttribute<System.Runtime.CompilerServices.RequiredMemberAttribute>() != null,
                     IsAbstract = x.CanRead ? x.GetMethod!.IsAbstract : x.SetMethod!.IsAbstract,
                     IsVirtual = x.CanRead ? x.GetMethod!.IsVirtual : x.SetMethod!.IsVirtual,
